@@ -1,31 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>HTMX Whack a Go</title>
-    <script
-      src="https://unpkg.com/htmx.org@1.9.10"
-      integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC"
-      crossorigin="anonymous"
-    ></script>
-    <link rel="stylesheet" href="../styling/style.css" />
-    <script defer src="../scripts/game.js"></script>
-    <script defer src="../scripts/points.js"></script>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Counter</title>
+    <script src="https://unpkg.com/htmx.org"></script>
+</head>
+<body>
+    <nav>
+        <div class="logo">Logo</div>
+        <ul>
+            <li>Home</li>
+            <li>Leaderboard</li>
+        </ul>
+    </nav>
 
-    <script src="https://unpkg.com/htmx.org/dist/ext/alpine-morph.js"></script>
-  </head>
-  <body>
-    <div>
-      <h1>Whack a Go!</h1>
-      <div class="score"> Score: <span class="scoreNumber"></span></div>
-      <div class="aimbot">
-        <canvas id="myCanvas"> </canvas>
-      </div>
-      <div class="leaderboard">
-        
-      </div>
+    <div class="centered">
+        <canvas id="myCanvas"></canvas>
+        <div class="score-counter">Score: 0</div>
+        <button>Save Score</button>
     </div>
-  </body>
 
+    
+</body>
 </html>
