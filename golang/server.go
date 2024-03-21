@@ -1,31 +1,28 @@
 package main
 
 import (
-	"fmt"
-	"net/http"
-
-	"github.com/gorilla/sessions"
+	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
+	"html/template"
+	"io"
 )
 
-var store = sessions.NewCookieStore([]byte("something-very-secret"))
+type Templates struct {
+	templates *template.Template
+}
+
+func (t *Templates) Render(w io.Writer, name string, data interface{}, c echo.Context) error {
+	return t.templates.ExecuteTemplate(w, name, data)
+}
+
+func newTemplate() *Templates {
+	return &Templates{
+		templates: template.Must(template.ParseGlob("public/views/*.html")),
+	}
+}
 
 func main() {
-	http.HandleFunc("/increment", func(w http.ResponseWriter, r *http.Request) {
-		session, _ := store.Get(r, "session-name")
-		if session.Values["counter"] == nil {
-			session.Values["counter"] = 0
-		}
-		session.Values["counter"] = session.Values["counter"].(int) + 1
-		session.Save(r, w)
-		fmt.Fprintf(w, "%d", session.Values["counter"])
+	e := echo.New()
+	e.Use(middleware.Logger())
 
-		// Print count in CLI
-		fmt.Println("Count:", session.Values["counter"])
-	})
-
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		http.ServeFile(w, r, "../public/index.html")
-	})
-
-	http.ListenAndServe(":8080", nil)
 }
