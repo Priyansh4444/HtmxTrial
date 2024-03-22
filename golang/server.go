@@ -22,8 +22,8 @@ type Contact struct {
 
 func newContact(name string, email string) Contact {
 	return Contact{
-		Email: name,
-		Name:  email,
+		Name: name,
+		Email:  email,
 	}
 }
 
@@ -43,13 +43,13 @@ func (d Data) hasEmail(email string) bool {
 }
 
 type FormData struct {
-	Value  map[string][]string
+	Values  map[string]string
 	Errors map[string]string
 }
 
 func newFormData() FormData {
 	return FormData{
-		Value:  make(map[string][]string),
+		Values:  make(map[string]string),
 		Errors: make(map[string]string),
 	}
 }
@@ -87,7 +87,6 @@ func newPage() Page {
 
 func main() {
 	e := echo.New()
-	data := newData()
 	e.Use(middleware.Logger())
 
 	page := newPage()
@@ -102,14 +101,17 @@ func main() {
 		email := c.FormValue("email")
 		if page.Data.hasEmail(email) {
 			formData := newFormData()
-			formData.Value["name"] = []string{name}
-			formData.Value["email"] = []string{email}
-			formData.Errors["email"] = "Email already exists"
-			return c.Render(400, "form", data)
-
+			formData.Values["name"] = name
+			formData.Values["email"] = email
+			formData.Errors["email"] = "That Email already exists"
+			return c.Render(422, "form", formData)
+			// By default an error is 400 but htmx only listens to 422
 		}
-		page.Data.Contacts = append(page.Data.Contacts, newContact(name, email))
-		return c.Render(200, "display", page)
+
+		contact := newContact(name, email)
+		page.Data.Contacts = append(page.Data.Contacts, contact)
+		c.Render(200, "form", newFormData())
+		return c.Render(200, "oob-contact", contact)
 	})
 
 	e.Logger.Fatal(e.Start(":42049"))
