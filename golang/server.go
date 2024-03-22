@@ -15,6 +15,34 @@ type Count struct {
 	Teeth  int
 }
 
+type Contact struct {
+	Email   string
+	Name string
+}
+
+func newContact(name string, email string) Contact {
+	return Contact{
+		Email: name,
+		Name: email,
+	}
+}
+
+type Contacts = []Contact
+
+type Data struct {
+	Contacts Contacts
+}
+
+func newData() Data {
+	return Data{
+		Contacts: []Contact{
+			newContact("John", "jd@gmail.com"),
+			newContact("Jane", "jc@gmail.com"),
+		},
+	
+	}
+}
+
 func (t *Templates) Render(w io.Writer, name string, data interface{}, c echo.Context) error {
 	return t.templates.ExecuteTemplate(w, name, data)
 }
@@ -27,19 +55,20 @@ func newTemplate() *Templates {
 
 func main() {
 	e := echo.New()
-	count := Count{Count: 0, Teeth: 0}
+	data := newData()
 	e.Use(middleware.Logger())
 
 	e.Renderer = newTemplate()
 	e.GET("/", func(c echo.Context) error {
 
-		return c.Render(200, "index", count)
+		return c.Render(200, "index", data)
 	})
 
-	e.POST("/count", func(c echo.Context) error {
-		count.Count++
-		count.Teeth += 2
-		return c.Render(200, "index", count)
+	e.POST("/contacts", func(c echo.Context) error {
+		name := c.FormValue("name")
+		email := c.FormValue("email")
+		data.Contacts = append(data.Contacts, newContact(name, email))
+		return c.Render(200, "index", data)
 	})
 
 	e.Logger.Fatal(e.Start(":42049"))
