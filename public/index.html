@@ -1,14 +1,12 @@
-{{ block "index" . }}
+{{ block  "index" . }}
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Counter</title>
-    <script src="https://unpkg.com/htmx.org/dist/htmx.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
 </head>
 <body>
-    <h1>Counter</h1>
-    <p>Count {{ .Count }}</p>
-    <button hx-get="/increment" hx-swap="outerHTML" hx-target="#count">Increment</button>
-    <button hx-get="/decrement" hx-swap="outerHTML" hx-target="#count">Decrement</button>
+    Count {{ .Count }}
 </body>
 </html>
