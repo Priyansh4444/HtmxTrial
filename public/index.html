@@ -8,29 +8,24 @@
     <script src="https://unpkg.com/htmx.org@1.7.0/dist/htmx.js"></script>
   </head>
   <body>
-    {{ template "form" . }}
-    <hr />
-    {{ template "display" . }}
-
+    <div>
+      {{ template "form" . }}
+      <hr />
+      {{ template "display" . }}
+    </div>
   </body>
 </html>
-{{ end }}
-{{ block "form" .}}
-<form hx-post="/contacts">
-    name: <input type="text" name="name" id="name">
-    email: <input type="text" name="email" id="email">
-    <button type="submit">Create Contact</button>
+{{ end }} {{ block "form" .}}
+<form hx-swap="outerHTML" hx-post="/contacts" hx-target="#contacts">
+  name: <input type="text" name="name" id="name" /> email:
+  <input type="text" name="email" id="email" />
+  <button type="submit">Create Contact</button>
 </form>
 
-{{ end }}
-
-{{ block "display" . }}
- <div style="display: flex; flex-direction: column;">
-    {{ range .Contacts }}
-        <div>
-            Name: <span>{{ .Name }}</span>
-            Email: <span>{{ .Email }}</span>
-        </div>
-    {{ end }}
- </div>
+{{ end }} {{ block "display" . }}
+<div id="contacts" style="display: flex; flex-direction: column">
+  {{ range .Contacts }}
+  <div>Name: <span>{{ .Name }}</span> Email: <span>{{ .Email }}</span></div>
+  {{ end }}
+</div>
 {{ end }}

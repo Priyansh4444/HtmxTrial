@@ -68,7 +68,7 @@ func main() {
 		name := c.FormValue("name")
 		email := c.FormValue("email")
 		data.Contacts = append(data.Contacts, newContact(name, email))
-		return c.Render(200, "index", data)
+		return c.Render(200, "display", data)
 	})
 
 	e.Logger.Fatal(e.Start(":42049"))
