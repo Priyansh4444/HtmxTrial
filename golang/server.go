@@ -12,6 +12,7 @@ type Templates struct {
 }
 type Count struct {
 	Count int
+	Teeth  int
 }
 
 func (t *Templates) Render(w io.Writer, name string, data interface{}, c echo.Context) error {
@@ -26,14 +27,19 @@ func newTemplate() *Templates {
 
 func main() {
 	e := echo.New()
-	count := Count{Count: 0}
+	count := Count{Count: 0, Teeth: 0}
 	e.Use(middleware.Logger())
 
 	e.Renderer = newTemplate()
-
 	e.GET("/", func(c echo.Context) error {
+
+		return c.Render(200, "index", count)
+	})
+
+	e.POST("/count", func(c echo.Context) error {
 		count.Count++
-		return c.Render(200, "index.html", count)
+		count.Teeth += 2
+		return c.Render(200, "index", count)
 	})
 
 	e.Logger.Fatal(e.Start(":42049"))
