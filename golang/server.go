@@ -1,7 +1,6 @@
 package main
 
 import (
-	"crypto/sha1"
 	"html/template"
 	"io"
 	"strconv"
